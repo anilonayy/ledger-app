@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Enums\ResponseMessageEnums;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -13,7 +14,7 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function ok(mixed $data = null, string $message = 'OK'): JsonResponse
+    public static function ok(mixed $data = null, string $message = ResponseMessageEnums::OK): JsonResponse
     {
         $code = Response::HTTP_OK;
 
@@ -32,7 +33,7 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function created(mixed $data = null, string $message = 'CREATED') : JsonResponse
+    public static function created(mixed $data = null, string $message = ResponseMessageEnums::CREATED) : JsonResponse
     {
         $code = Response::HTTP_CREATED;
 
@@ -51,7 +52,7 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function accepted(mixed $data = null, string $message = 'ACCEPTED'): JsonResponse
+    public static function accepted(mixed $data = null, string $message = ResponseMessageEnums::ACCEPTED): JsonResponse
     {
         $code = Response::HTTP_ACCEPTED;
 
@@ -80,8 +81,8 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function badRequest(mixed $errors = null, string $message = 'BAD REQUEST'): JsonResponse
-    {
+    public static function badRequest(mixed $errors = null, string $message = ResponseMessageEnums::BAD_REQUEST
+    ): JsonResponse {
         $code = Response::HTTP_BAD_REQUEST;
 
         return response()->json([
@@ -99,8 +100,8 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function unauthorized(mixed $errors = null, string $message = 'UNAUTHORIZED'): JsonResponse
-    {
+    public static function unauthorized(mixed $errors = null, string $message = ResponseMessageEnums::UNAUTHORIZED
+    ): JsonResponse {
         $code = Response::HTTP_UNAUTHORIZED;
 
         return response()->json([
@@ -118,8 +119,8 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function forbidden(mixed $errors = null, string $message = 'FORBIDDEN'): JsonResponse
-    {
+    public static function forbidden(mixed $errors = null, string $message = ResponseMessageEnums::FORBIDDEN
+    ): JsonResponse {
         $code = Response::HTTP_FORBIDDEN;
 
         return response()->json([
@@ -136,31 +137,13 @@ class Api
      * @param mixed $errors
      * @return JsonResponse
      */
-    public static function notFound(mixed $errors = null): JsonResponse
+    public static function notFound(mixed $errors = null, $message = ResponseMessageEnums::NOT_FOUND): JsonResponse
     {
         $code = Response::HTTP_NOT_FOUND;
 
         return response()->json([
             'status' => $code,
-            'message' => 'NOT FOUND',
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
-    }
-
-    /**
-     *  Returns a JSON response for a method not allowed request.
-     *
-     * @param mixed $errors
-     * @return JsonResponse
-     */
-    public static function methodNotAllowed(mixed $errors = null): JsonResponse
-    {
-        $code = Response::HTTP_METHOD_NOT_ALLOWED;
-
-        return response()->json([
-            'status' => $code,
-            'message' => 'METHOD NOT ALLOWED',
+            'message' => $message,
             'errors' => $errors,
             'execution' => Api::getExecutionTime(),
         ], $code);
@@ -173,8 +156,10 @@ class Api
      * @param string $message
      * @return JsonResponse
      */
-    public static function unprocessableEntity(mixed $errors = null, string $message = 'UNPROCESSABLE ENTITY'): JsonResponse
-    {
+    public static function unprocessableEntity(
+        mixed $errors = null,
+        string $message = ResponseMessageEnums::INVALID_PAYLOAD
+    ): JsonResponse {
         $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
         return response()->json([
@@ -196,7 +181,7 @@ class Api
     public static function dynamic(
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR,
         mixed $errors = null,
-        string $message = 'ERROR'
+        string $message = ResponseMessageEnums::SERVER_ERROR
     ): JsonResponse {
         return response()->json([
             'status' => $statusCode,
