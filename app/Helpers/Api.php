@@ -16,15 +16,9 @@ class Api
      */
     public static function ok(mixed $data = null, string $message = ResponseMessageEnums::OK): JsonResponse
     {
-        $code = Response::HTTP_OK;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => $data,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::successSchema(Response::HTTP_OK, $data, $message);
     }
+
 
     /**
      * Returns a JSON response for a resource created.
@@ -35,14 +29,7 @@ class Api
      */
     public static function created(mixed $data = null, string $message = ResponseMessageEnums::CREATED) : JsonResponse
     {
-        $code = Response::HTTP_CREATED;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => $data,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::successSchema(Response::HTTP_CREATED, $data, $message);
     }
 
     /**
@@ -54,14 +41,7 @@ class Api
      */
     public static function accepted(mixed $data = null, string $message = ResponseMessageEnums::ACCEPTED): JsonResponse
     {
-        $code = Response::HTTP_ACCEPTED;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => $data,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::successSchema(Response::HTTP_ACCEPTED, $data, $message);
     }
 
     /**
@@ -83,14 +63,7 @@ class Api
      */
     public static function badRequest(mixed $errors = null, string $message = ResponseMessageEnums::BAD_REQUEST
     ): JsonResponse {
-        $code = Response::HTTP_BAD_REQUEST;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::errorSchema(Response::HTTP_BAD_REQUEST, $errors, $message);
     }
 
     /**
@@ -102,14 +75,7 @@ class Api
      */
     public static function unauthorized(mixed $errors = null, string $message = ResponseMessageEnums::UNAUTHORIZED
     ): JsonResponse {
-        $code = Response::HTTP_UNAUTHORIZED;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::errorSchema(Response::HTTP_UNAUTHORIZED, $errors, $message);
     }
 
     /**
@@ -121,14 +87,7 @@ class Api
      */
     public static function forbidden(mixed $errors = null, string $message = ResponseMessageEnums::FORBIDDEN
     ): JsonResponse {
-        $code = Response::HTTP_FORBIDDEN;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::errorSchema(Response::HTTP_FORBIDDEN, $errors, $message);
     }
 
     /**
@@ -139,14 +98,7 @@ class Api
      */
     public static function notFound(mixed $errors = null, $message = ResponseMessageEnums::NOT_FOUND): JsonResponse
     {
-        $code = Response::HTTP_NOT_FOUND;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::errorSchema(Response::HTTP_NOT_FOUND, $errors, $message);
     }
 
     /**
@@ -160,14 +112,7 @@ class Api
         mixed $errors = null,
         string $message = ResponseMessageEnums::INVALID_PAYLOAD
     ): JsonResponse {
-        $code = Response::HTTP_UNPROCESSABLE_ENTITY;
-
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $code);
+        return self::errorSchema(Response::HTTP_UNPROCESSABLE_ENTITY, $errors, $message);
     }
 
     /**
@@ -183,20 +128,45 @@ class Api
         mixed $errors = null,
         string $message = ResponseMessageEnums::SERVER_ERROR
     ): JsonResponse {
-        return response()->json([
-            'status' => $statusCode,
-            'message' => $message,
-            'errors' => $errors,
-            'execution' => Api::getExecutionTime(),
-        ], $statusCode);
+       return self::errorSchema($statusCode, $errors, $message);
     }
 
     /**
-     * Returns the execution time of the request.
-     *
+     * @param $code
+     * @param $data
+     * @param $message
+     * @return JsonResponse
+     */
+    private static function successSchema($code, $data, $message): JsonResponse
+    {
+        return response()->json([
+            'status' => (int) $code,
+            'message' => (string) $message,
+            'data' => $data,
+            'execution' => self::getExecutionTime(),
+        ], (int) $code);
+    }
+
+    /**
+     * @param $code
+     * @param $errors
+     * @param $message
+     * @return JsonResponse
+     */
+    private static function errorSchema($code, $errors, $message): JsonResponse
+    {
+        return response()->json([
+            'status' => (int) $code,
+            'message' => (string) $message,
+            'errors' => $errors,
+            'execution' => self::getExecutionTime(),
+        ], (int) $code);
+    }
+
+    /**
      * @return string
      */
-    public static function getExecutionTime (): string
+    private static function getExecutionTime(): string
     {
         return number_format(((microtime(true) - LARAVEL_START) * 1000), 0).' ms';
     }
