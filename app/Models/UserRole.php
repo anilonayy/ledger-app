@@ -10,11 +10,11 @@ class UserRole extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
     protected $fillable = [
         'role_id',
         'user_id',
     ];
+    protected $with = ['role'];
 
     /**
      * @return BelongsTo
@@ -22,13 +22,5 @@ class UserRole extends Model
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
-    }
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

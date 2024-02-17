@@ -2,6 +2,10 @@
 
 namespace App\Repositories\Role;
 
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Collection;
+
 interface RoleRepositoryInterface
 {
     /**
@@ -12,9 +16,21 @@ interface RoleRepositoryInterface
 
 
     /**
-     * @param int $userId
-     * @param int $roleId
+     * @param int|User $user
+     * @param int|Role $role
      * @return void
      */
-    public function assignRole(int $userId, int $roleId): void;
+    public function assignRole(int|User $user, int|Role $role): void;
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getAbilitiesByUser(int $userId): array;
+
+    /**
+     * @param string $roleName
+     * @return Role
+     */
+    public function getRoleByName(string $roleName): Role;
 }

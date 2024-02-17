@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
+        Schema::create('accounts', function (Blueprint $table) {
+            $table->id()->from(100000);
             $table->string('name')->unique();
-            $table->json('abilities');
+            $table->string('currency')->default('USD');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->double('balance')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('accounts');
     }
 };

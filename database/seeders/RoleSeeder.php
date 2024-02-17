@@ -2,11 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use App\Repositories\Role\RoleRepositoryInterface;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Auth;
 
 class RoleSeeder extends Seeder
 {
@@ -19,11 +16,16 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $this->roleRepository->store([
-            'name' => 'admin'
+            'name' => 'admin',
+            'abilities' => '*'
         ]);
 
         $this->roleRepository->store([
-            'name' => 'user'
+            'name' => 'user',
+            'abilities' => [
+                'accounts:create',
+                'accounts:list'
+            ]
         ]);
     }
 }

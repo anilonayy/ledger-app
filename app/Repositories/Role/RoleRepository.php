@@ -5,6 +5,7 @@ namespace App\Repositories\Role;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
+use Illuminate\Support\Collection;
 
 class RoleRepository implements RoleRepositoryInterface
 {
@@ -32,5 +33,33 @@ class RoleRepository implements RoleRepositoryInterface
             'user_id' => $userId,
             'role_id' => $roleId
         ]);
+    }
+
+    /**
+     * @param int $userId
+     * @return Collection
+     */
+    public function getRolesByUserId(int $userId): Collection
+    {
+        return User::where('id', $userId)->with('roles')->firstOrFail()->roles
+            ->map((fn($userRole) => $userRole->role));
+    }
+
+    /**
+     * @param string $roleName
+     * @return Role
+     */
+    public function getRoleByName(string $roleName): Role
+    {
+        return Role::where('name', $roleName)->firstOrFail();
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getAbilitiesByUser(int $userId): array
+    {
+        return $this->getRolesByUserId($userId)->map(fn($role) => $role->abilities)->flatten()->toArray();
     }
 }

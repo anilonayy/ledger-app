@@ -9,5 +9,23 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name','abilities'];
+
+    /**
+     * @param $value
+     * @return void
+     */
+    public function setAbilitiesAttribute($value)
+    {
+        $this->attributes['abilities'] = json_encode($value);
+    }
+
+    /**
+     * @param $value
+     * @return array|string
+     */
+    public function getAbilitiesAttribute($value): array|string
+    {
+        return json_decode($value);
+    }
 }
