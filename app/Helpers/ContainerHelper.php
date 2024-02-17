@@ -25,4 +25,22 @@ final class ContainerHelper
             );
         }
     }
+
+    /**
+     * @param Application $app
+     * @return void
+     */
+    public static function registerRepositories(Application $app): void
+    {
+        $serviceFolders = glob(app_path('Repositories/*'));
+
+        foreach ($serviceFolders as $serviceFolder) {
+            $serviceName = basename($serviceFolder);
+
+            $app->bind(
+                "App\Repositories\\{$serviceName}\\{$serviceName}RepositoryInterface",
+                "App\Repositories\\{$serviceName}\\{$serviceName}Repository",
+            );
+        }
+    }
 }

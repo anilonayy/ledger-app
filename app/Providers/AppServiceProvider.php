@@ -13,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         ContainerHelper::registerServices($this->app);
+        ContainerHelper::registerRepositories($this->app);
     }
 
     /**
