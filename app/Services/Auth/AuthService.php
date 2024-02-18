@@ -17,7 +17,7 @@ class AuthService implements AuthServiceInterface
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly RoleRepositoryInterface $roleRepository,
-        private readonly AuthRepositoryInterface $authRepository,
+        private readonly AuthRepositoryInterface $authRepository
     ){}
 
     /**

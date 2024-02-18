@@ -52,8 +52,11 @@ class User extends Authenticatable
         return $this->hasMany(UserRole::class);
     }
 
-    public function accounts(): BelongsToMany
+    /**
+     * @return HasMany
+     */
+    public function accounts(): HasMany
     {
-        return $this->belongsToMany(Account::class, 'user_accounts');
+        return $this->hasMany(Account::class);
     }
 }

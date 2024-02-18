@@ -3,6 +3,7 @@
 namespace App\Repositories\Account;
 
 use App\Models\Account;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class AccountRepository implements AccountRepositoryInterface
@@ -20,6 +21,14 @@ class AccountRepository implements AccountRepositoryInterface
             'currency' => $data['currency'],
             'balance' => 0,
         ]);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAllAccountsByUser(): Collection
+    {
+        return User::with('accounts')->get();
     }
 
     /**
@@ -53,4 +62,6 @@ class AccountRepository implements AccountRepositoryInterface
     {
         return Account::findOrFail($accountId);
     }
+
+
 }

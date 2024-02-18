@@ -17,6 +17,25 @@ class AccountController extends Controller
      */
     public function store(CreateAccountRequest $request, AccountServiceInterface $accountService): JsonResponse
     {
-        return Api::ok($accountService->store($request->validated()));
+        return Api::created($accountService->store($request->validated()));
+    }
+
+    /**
+     * @param AccountServiceInterface $accountService
+     * @return JsonResponse
+     */
+    public function getAllUserAccounts(AccountServiceInterface $accountService): JsonResponse
+    {
+        return Api::ok($accountService->getAllAccountsByUser());
+    }
+
+    /**
+     * @param int $userId
+     * @param AccountServiceInterface $accountService
+     * @return JsonResponse
+     */
+    public function getUserAccounts(int $userId, AccountServiceInterface $accountService): JsonResponse
+    {
+        return Api::ok($accountService->getUserAccounts($userId));
     }
 }

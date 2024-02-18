@@ -16,6 +16,11 @@ interface AccountRepositoryInterface
     public function create(array $data): Account;
 
     /**
+     * @return Collection
+     */
+    public function getAllAccountsByUser(): Collection;
+
+    /**
      * @param int $userId
      * @return Collection
      */
