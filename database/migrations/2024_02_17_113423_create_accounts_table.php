@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id()->from(100000);
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('currency')->default('USD');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->double('balance', 15,2)->default(0);

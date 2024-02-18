@@ -24,7 +24,8 @@ class RoleSeeder extends Seeder
             'name' => 'user',
             'abilities' => [
                 'accounts.create',
-                'transactions.transfer'
+                'accounts.balance-at-time',
+                'transactions.transfer',
             ]
         ]);
     }

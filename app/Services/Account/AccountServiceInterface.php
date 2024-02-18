@@ -24,4 +24,10 @@ interface AccountServiceInterface
      * @throws NotFoundHttpException
      */
     public function getUserAccounts(int $userId): JsonResource;
+
+    /**
+     * @param array $payload
+     * @return JsonResource
+     */
+    public function getBalanceAtTime(array $payload): JsonResource;
 }

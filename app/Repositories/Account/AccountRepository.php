@@ -2,9 +2,14 @@
 
 namespace App\Repositories\Account;
 
+use App\Enums\TransactionStatusEnums;
 use App\Models\Account;
+use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AccountRepository implements AccountRepositoryInterface
 {
@@ -71,5 +76,27 @@ class AccountRepository implements AccountRepositoryInterface
     public function getAccountByIdWithUser(int $accountId): Account
     {
         return Account::with('user')->findOrFail($accountId);
+    }
+
+    /**
+     * @param array $payload
+     * @return Collection
+     */
+    public function getBalanceAtTime(array $payload): Collection
+    {
+        $date = Carbon::parse($payload['date'])->timezone('UTC')->toDateTimeString();
+
+        return Account::where('user_id', Auth::id())
+            ->when(isset($payload['account_id']), function ($query) use ($payload) {
+                $query->where('id', $payload['account_id']);
+            })
+            ->select('id','name', 'balance', 'currency')
+            ->addSelect([
+                'balance_at_time' => Transaction::select(DB::raw('SUM(amount)'))
+                    ->whereColumn('receiver_account_id', 'accounts.id')
+                    ->where('status', TransactionStatusEnums::SUCCESS)
+                    ->where('created_at', '<=', $date)
+            ])
+            ->get();
     }
 }

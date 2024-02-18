@@ -44,4 +44,10 @@ interface AccountRepositoryInterface
      * @return Account
      */
     public function insertAccountBalance(int $accountId, float $amount): Account;
+
+    /**
+     * @param array $payload
+     * @return Collection
+     */
+    public function getBalanceAtTime(array $payload): Collection;
 }

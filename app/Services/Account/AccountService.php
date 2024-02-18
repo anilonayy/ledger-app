@@ -4,6 +4,8 @@ namespace App\Services\Account;
 
 use App\Http\Resources\Account\AccountResource;
 use App\Http\Resources\Account\AccountWithUserResource;
+use App\Http\Resources\Account\BalanceAtTimeResource;
+use App\Models\Account;
 use App\Models\User;
 use App\Repositories\Account\AccountRepositoryInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -48,5 +50,17 @@ class AccountService implements AccountServiceInterface
         }
 
         return AccountResource::collection($this->accountRepository->getUserAccounts($userId));
+    }
+
+    /**
+     * @param array $payload
+     * @return JsonResource
+     */
+    public function getBalanceAtTime(array $payload): JsonResource
+    {
+        return BalanceAtTimeResource::make($this->accountRepository->getBalanceAtTime($payload))->additional([
+            'date' => $payload['date'],
+            'isSingle' => isset($payload['account_id'])
+        ]);
     }
 }

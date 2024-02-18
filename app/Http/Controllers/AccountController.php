@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Api;
 use App\Http\Requests\Accounts\CreateAccountRequest;
+use App\Http\Requests\Accounts\GetBalanceAtTimeRequest;
 use App\Services\Account\AccountServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -37,5 +38,10 @@ class AccountController extends Controller
     public function getUserAccounts(int $userId, AccountServiceInterface $accountService): JsonResponse
     {
         return Api::ok($accountService->getUserAccounts($userId));
+    }
+
+    public function getBalanceAtTime(GetBalanceAtTimeRequest $request, AccountServiceInterface $accountService): JsonResponse
+    {
+        return Api::ok($accountService->getBalanceAtTime($request->validated()));
     }
 }
