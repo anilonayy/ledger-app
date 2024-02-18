@@ -44,4 +44,13 @@ class AccountController extends Controller
     {
         return Api::ok($accountService->getBalanceAtTime($request->validated()));
     }
+
+    /**
+     * @param AccountServiceInterface $accountService
+     * @return JsonResponse
+     */
+    public function getMyAccounts(AccountServiceInterface $accountService): JsonResponse
+    {
+        return Api::ok($accountService->getMyAccounts());
+    }
 }

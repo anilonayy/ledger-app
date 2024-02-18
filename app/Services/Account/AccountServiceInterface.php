@@ -30,4 +30,9 @@ interface AccountServiceInterface
      * @return JsonResource
      */
     public function getBalanceAtTime(array $payload): JsonResource;
+
+    /**
+     * @return JsonResource
+     */
+    public function getMyAccounts(): JsonResource;
 }

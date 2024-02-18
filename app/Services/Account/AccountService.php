@@ -63,4 +63,12 @@ class AccountService implements AccountServiceInterface
             'isSingle' => isset($payload['account_id'])
         ]);
     }
+
+    /**
+     * @return JsonResource
+     */
+    public function getMyAccounts(): JsonResource
+    {
+        return AccountResource::collection($this->accountRepository->getUserAccounts(Auth::id()));
+    }
 }
