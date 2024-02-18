@@ -30,4 +30,27 @@ class AccountRepository implements AccountRepositoryInterface
     {
         return Account::where('user_id', $userId)->get();
     }
+
+    /**
+     * @param int $accountId
+     * @param float $amount
+     * @return Account
+     */
+    public function insertAccountBalance(int $accountId, float $amount): Account
+    {
+        $account = Account::find($accountId);
+        $account->balance += $amount;
+        $account->save();
+
+        return $account;
+    }
+
+    /**
+     * @param int $accountId
+     * @return Account
+     */
+    public function getUserAccountById(int $accountId): Account
+    {
+        return Account::findOrFail($accountId);
+    }
 }

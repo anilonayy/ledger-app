@@ -2,7 +2,7 @@
 
 namespace App\Services\Account;
 
-use App\Http\Resources\Account\AccountCreatedResource;
+use App\Http\Resources\Account\AccountResource;
 use App\Repositories\Account\AccountRepositoryInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +22,6 @@ class AccountService implements AccountServiceInterface
     {
         $data['user_id'] = Auth::id();
 
-        return AccountCreatedResource::make($this->accountRepository->create($data));
+        return AccountResource::make($this->accountRepository->create($data));
     }
 }

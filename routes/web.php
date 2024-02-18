@@ -14,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    \App\Helpers\CurrencyHelper::convert(100, 'USD', 'TRY');
     return view('welcome');
 });

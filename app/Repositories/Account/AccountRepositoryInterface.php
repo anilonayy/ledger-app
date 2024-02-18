@@ -20,4 +20,17 @@ interface AccountRepositoryInterface
      * @return Collection
      */
     public function getUserAccounts(int $userId): Collection;
+
+    /**
+     * @param int $accountId
+     * @return Account
+     */
+    public function getUserAccountById(int $accountId): Account;
+
+    /**
+     * @param int $accountId
+     * @param float $amount
+     * @return Account
+     */
+    public function insertAccountBalance(int $accountId, float $amount): Account;
 }

@@ -17,4 +17,10 @@ interface UserRepositoryInterface
      * @return User
      */
     public function getUserByEmail(string $email): User;
+
+    /**
+     * @param int $id
+     * @return User
+     */
+    public function getUserById(int $id): User;
 }

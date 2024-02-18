@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('currency')->default('USD');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->double('balance')->default(0);
+            $table->double('balance', 15,2)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
