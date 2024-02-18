@@ -55,6 +55,26 @@ class TransactionService implements TransactionServiceInterface
 
     /**
      * @param array $data
+     * @return JsonResource
+     * @throws Exception
+     */
+    public function withdraw(array $data): JsonResource
+    {
+        $payload = [
+            'sender_account_id' => $data['account_id'],
+            'receiver_account_id' => $data['account_id'],
+            'amount' => -$data['amount'],
+            'type' => TransactionTypeEnums::WITHDRAW,
+            'status' => TransactionStatusEnums::SUCCESS,
+            'creator_id' => Auth::id(),
+            'note' => $data['note'] ?? "Withdraw from account"
+        ];
+
+        return AccountResource::make($this->createSingleTransaction($payload));
+    }
+
+    /**
+     * @param array $data
      * @param TransactionTypeEnums $type
      * @param TransactionStatusEnums $status
      * @return Account
@@ -108,6 +128,53 @@ class TransactionService implements TransactionServiceInterface
             return $senderAccount;
         } catch (Exception $e) {
             DB::rollBack();
+
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * @param array $payload
+     * @return Account
+     * @throws Exception
+     */
+    private function createSingleTransaction(array $payload): Account
+    {
+        try {
+            DB::beginTransaction();
+
+            $senderAccount = $this->accountRepository->getAccountByIdWithUser($payload['sender_account_id']);
+            $receiverAccount = $this->accountRepository->getAccountByIdWithUser($payload['receiver_account_id']);
+
+            $convertedAmount = $payload['amount'];
+
+            $note = $payload['note'] ?? "Transfer from {$senderAccount->user->name}";
+
+            if ($senderAccount->currency !== $receiverAccount->currency) {
+                $convertedData = CurrencyHelper::convert($payload['amount'], $senderAccount->currency, $receiverAccount->currency);
+
+                $convertedAmount = $convertedData['amount'];
+                $note = "{$payload['amount']} {$senderAccount->currency} converted to {$convertedAmount} {$receiverAccount->currency} with rate {$convertedData['rate']}.";
+            }
+
+            $this->transactionRepository->create([
+                'sender_account_id' => $receiverAccount->id,
+                'receiver_account_id' => $senderAccount->id,
+                'amount' => $convertedAmount,
+                'type' => $payload['type'],
+                'status' => $payload['status'],
+                'creator_id' => $payload['creator_id'],
+                'description' =>  $note
+            ]);
+
+            $senderAccount = $this->accountRepository->insertAccountBalance($senderAccount->id, $convertedAmount);
+
+            DB::commit();
+
+            return $senderAccount;
+        } catch (Exception $e) {
+            DB::rollBack();
+
             throw new Exception($e->getMessage());
         }
     }

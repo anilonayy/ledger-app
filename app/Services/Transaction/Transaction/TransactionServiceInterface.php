@@ -17,4 +17,10 @@ interface TransactionServiceInterface
      * @return JsonResource
      */
     public function transferBetweenAccounts(array $data): JsonResource;
+
+    /**
+     * @param array $data
+     * @return JsonResource
+     */
+    public function withdraw(array $data): JsonResource;
 }

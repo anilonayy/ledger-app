@@ -27,6 +27,7 @@ class RoleSeeder extends Seeder
                 'accounts.balance-at-time',
                 'accounts.read-own',
                 'transactions.transfer',
+                'transactions.withdraw',
             ]
         ]);
     }
