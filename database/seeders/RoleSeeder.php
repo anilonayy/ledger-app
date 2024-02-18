@@ -23,8 +23,7 @@ class RoleSeeder extends Seeder
         $this->roleRepository->store([
             'name' => 'user',
             'abilities' => [
-                'accounts:create',
-                'accounts:list'
+                'accounts.create',
             ]
         ]);
     }

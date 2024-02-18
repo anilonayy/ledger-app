@@ -6,5 +6,5 @@ Route::group([
     'middleware' => 'auth:sanctum',
     'prefix' => 'accounts',
 ], function() {
-    Route::post('/create', 'AccountController@store');
+    Route::middleware('abilities:accounts.create')->post('/create', 'AccountController@store');
 });

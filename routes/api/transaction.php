@@ -6,5 +6,5 @@ Route::group([
     'middleware' => ['auth:sanctum'],
     'prefix' => 'transactions',
 ], function() {
-    Route::post('/give-credit', 'TransactionController@giveCredit');
+    Route::middleware('abilities:give-credit')->post('/give-credit', 'TransactionController@giveCredit');
 });

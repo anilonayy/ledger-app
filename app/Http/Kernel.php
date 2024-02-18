@@ -2,8 +2,20 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RequestLogger;
+use App\Http\Middleware\SanctumOnlyGuest;
+use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\TrustProxies;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 
 class Kernel extends HttpKernel
 {
@@ -15,12 +27,12 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        \App\Http\Middleware\TrustProxies::class,
-        \Illuminate\Http\Middleware\HandleCors::class,
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        TrustProxies::class,
+        HandleCors::class,
+        PreventRequestsDuringMaintenance::class,
+        ValidatePostSize::class,
+        TrimStrings::class,
+        ConvertEmptyStringsToNull::class,
         RequestLogger::class,
     ];
 
@@ -32,8 +44,8 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'api' => [
             RequestLogger::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ThrottleRequests::class . ':api',
+            SubstituteBindings::class,
 
         ],
         'web' => [],
@@ -47,7 +59,9 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'sanctum.guest' => \App\Http\Middleware\SanctumOnlyGuest::class,
+        'abilities' => CheckAbilities::class,
+        'can' => Authorize::class,
+        'auth' => Authenticate::class,
+        'sanctum.guest' => SanctumOnlyGuest::class,
     ];
 }
