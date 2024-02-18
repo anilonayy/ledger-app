@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
 
         User::create([
-            'name' => 'System Root',
+            'name' => 'Ledger App',
             'email' => 'root@useinsider.com',
             'password' => Hash::make('password')
         ]);

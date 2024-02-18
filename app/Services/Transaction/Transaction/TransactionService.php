@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Transaction;
+namespace App\Services\Transaction\Transaction;
 
 use App\Enums\TransactionStatusEnums;
 use App\Enums\TransactionTypeEnums;
 use App\Helpers\CurrencyHelper;
 use App\Http\Resources\Account\AccountResource;
-use App\Http\Resources\Transactions\GiveCreditResource;
+use App\Models\Account;
 use App\Repositories\Account\AccountRepositoryInterface;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -23,7 +23,6 @@ class TransactionService implements TransactionServiceInterface
         private readonly AccountRepositoryInterface $accountRepository
     ){}
 
-
     /**
      * @param array $data
      * @return JsonResource
@@ -31,17 +30,48 @@ class TransactionService implements TransactionServiceInterface
      */
     public function giveCredit(array $data): JsonResource
     {
+        $senderAccount = $this->accountRepository->getUserAccounts(
+            $this->userRepository->getUserByEmail('root@useinsider.com')->id
+        )->first();
+
+        $data['sender_account_id'] = $senderAccount->id;
+
+        return AccountResource::make(
+            $this->createTransaction($data, TransactionTypeEnums::CREDIT, TransactionStatusEnums::SUCCESS)
+        );
+    }
+
+    /**
+     * @param array $data
+     * @return JsonResource
+     * @throws Exception
+     */
+    public function transferBetweenAccounts(array $data): JsonResource
+    {
+        return AccountResource::make(
+            $this->createTransaction($data, TransactionTypeEnums::TRANSFER, TransactionStatusEnums::SUCCESS)
+        );
+    }
+
+    /**
+     * @param array $data
+     * @param TransactionTypeEnums $type
+     * @param TransactionStatusEnums $status
+     * @return Account
+     * @throws Exception
+     */
+    protected function createTransaction(array $data, TransactionTypeEnums $type, TransactionStatusEnums $status): Account
+    {
         try {
             DB::beginTransaction();
 
-            $senderAccount = $this->accountRepository->getUserAccounts(
-                $this->userRepository->getUserByEmail('root@useinsider.com')->id
-            )->first();
-            $receiverAccount = $this->accountRepository->getUserAccountById($data['receiver_account_id']);
+            $senderAccount = $this->accountRepository->getAccountByIdWithUser($data['sender_account_id']);
+            $receiverAccount = $this->accountRepository->getAccountByIdWithUser($data['receiver_account_id']);
+
             $convertedAmount = $data['amount'];
 
-            $receiverNote = env('APP_NAME')." give credit to you. Happy Spending!";
-            $senderNote = "You give credit to ".env('APP_NAME')." Thank you!";
+            $receiverNote = $data['note'] ?? "Transfer from {$senderAccount->user->name}";
+            $senderNote = $data['note'] ?? "Transfer to {$receiverAccount->user->name}";
 
             if ($senderAccount->currency !== $receiverAccount->currency) {
                 $convertedData = CurrencyHelper::convert($data['amount'], $senderAccount->currency, $receiverAccount->currency);
@@ -54,8 +84,8 @@ class TransactionService implements TransactionServiceInterface
                 'sender_account_id' => $senderAccount->id,
                 'receiver_account_id' => $receiverAccount->id,
                 'amount' => $convertedAmount,
-                'type' => TransactionTypeEnums::CREDIT,
-                'status' => TransactionStatusEnums::SUCCESS,
+                'type' => $type,
+                'status' => $status,
                 'creator_id' => Auth::id(),
                 'description' => $receiverNote
             ]);
@@ -64,18 +94,18 @@ class TransactionService implements TransactionServiceInterface
                 'sender_account_id' => $receiverAccount->id,
                 'receiver_account_id' => $senderAccount->id,
                 'amount' => -$data['amount'],
-                'type' => TransactionTypeEnums::CREDIT,
-                'status' => TransactionStatusEnums::SUCCESS,
+                'type' => $type,
+                'status' => $status,
                 'creator_id' => Auth::id(),
                 'description' =>  $senderNote
             ]);
 
-            $account = $this->accountRepository->insertAccountBalance($receiverAccount->id, $convertedAmount);
-            $this->accountRepository->insertAccountBalance($senderAccount->id, -$data['amount']);
+            $this->accountRepository->insertAccountBalance($receiverAccount->id, $convertedAmount);
+            $senderAccount = $this->accountRepository->insertAccountBalance($senderAccount->id, -$data['amount']);
 
             DB::commit();
 
-            return AccountResource::make($account);
+            return $senderAccount;
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());

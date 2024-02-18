@@ -58,10 +58,18 @@ class AccountRepository implements AccountRepositoryInterface
      * @param int $accountId
      * @return Account
      */
-    public function getUserAccountById(int $accountId): Account
+    public function getAccountById(int $accountId): Account
     {
         return Account::findOrFail($accountId);
     }
 
 
+    /**
+     * @param int $accountId
+     * @return Account
+     */
+    public function getAccountByIdWithUser(int $accountId): Account
+    {
+        return Account::with('user')->findOrFail($accountId);
+    }
 }

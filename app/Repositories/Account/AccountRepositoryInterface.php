@@ -30,7 +30,13 @@ interface AccountRepositoryInterface
      * @param int $accountId
      * @return Account
      */
-    public function getUserAccountById(int $accountId): Account;
+    public function getAccountById(int $accountId): Account;
+
+    /**
+     * @param int $accountId
+     * @return Account
+     */
+    public function getAccountByIdWithUser(int $accountId): Account;
 
     /**
      * @param int $accountId

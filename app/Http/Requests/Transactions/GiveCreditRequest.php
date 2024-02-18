@@ -10,7 +10,8 @@ class GiveCreditRequest extends Request
     {
         return [
             'receiver_account_id' => 'required|integer|exists:accounts,id',
-            'amount' => 'required|numeric|min:0'
+            'amount' => 'required|numeric|gt:0',
+            'note' => 'sometimes|string|max:255'
         ];
     }
 }

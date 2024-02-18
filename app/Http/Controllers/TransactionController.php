@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Api;
 use App\Http\Requests\Transactions\GiveCreditRequest;
-use App\Services\Transaction\TransactionService;
+use App\Http\Requests\Transactions\TransferRequest;
+use App\Services\Transaction\Transaction\TransactionService;
 use Illuminate\Http\JsonResponse;
 
 class TransactionController extends Controller
@@ -18,5 +19,16 @@ class TransactionController extends Controller
     public function giveCredit(GiveCreditRequest $request, TransactionService $transactionService): JsonResponse
     {
         return Api::created($transactionService->giveCredit($request->validated()));
+    }
+
+    /**
+     * @param TransferRequest $request
+     * @param TransactionService $transactionService
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function transferBetweenAccounts(TransferRequest $request, TransactionService $transactionService): JsonResponse
+    {
+        return Api::ok($transactionService->transferBetweenAccounts($request->validated()));
     }
 }
