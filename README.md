@@ -16,4 +16,5 @@ This is a simple app  to manage ledger. This project allows you:
 - ~~List all or single transaction (Coming soon)~~.
 <br />
 <br />
-Don't you have a time for testing? Don't worry, I have prepared a Postman collection for you. You can find it [here](https://www.postman.com/warped-space-758269/workspace/ledgerapp/collection/29192763-d5bca94b-3bdd-4fb6-bc74-c2cbb8e31172?action=share&creator=29192763&active-environment=29192763-4f997ae1-b7d8-48fe-bb00-fd7132147c4e).
+Don't you have a time for testing? Don't worry, I have prepared a Postman collection for you. You can find it
+[here](https://www.postman.com/warped-space-758269/workspace/ledgerapp/collection/29192763-d5bca94b-3bdd-4fb6-bc74-c2cbb8e31172?action=share&creator=29192763&active-environment=29192763-4f997ae1-b7d8-48fe-bb00-fd7132147c4e).
