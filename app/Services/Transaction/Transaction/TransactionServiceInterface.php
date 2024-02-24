@@ -23,4 +23,11 @@ interface TransactionServiceInterface
      * @return JsonResource
      */
     public function withdraw(array $data): JsonResource;
+
+    /**
+     * @param array $payload
+     * @param int $accountId
+     * @return JsonResource
+     */
+    public function getMyTransactions(array $payload, int $accountId): JsonResource;
 }

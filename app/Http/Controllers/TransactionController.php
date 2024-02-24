@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Api;
+use App\Http\Requests\Shared\AllWithFilterRequest;
 use App\Http\Requests\Transactions\GiveCreditRequest;
 use App\Http\Requests\Transactions\TransferRequest;
 use App\Http\Requests\Transactions\WithdrawRequest;
@@ -41,5 +42,19 @@ class TransactionController extends Controller
     public function withdraw(WithdrawRequest $request, TransactionService $transactionService): JsonResponse
     {
         return Api::ok($transactionService->withdraw($request->validated()));
+    }
+
+    /**
+     * @param AllWithFilterRequest $request
+     * @param int $accountId
+     * @param TransactionService $transactionService
+     * @return JsonResponse
+     */
+    public function getMyTransactions(
+        int $accountId,
+        AllWithFilterRequest $request,
+        TransactionService $transactionService
+    ): JsonResponse {
+        return Api::ok($transactionService->getMyTransactions($request->validated(), $accountId));
     }
 }

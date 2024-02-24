@@ -3,6 +3,7 @@
 namespace App\Repositories\Transaction;
 
 use App\Models\Transaction;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface TransactionRepositoryInterface
 {
@@ -11,4 +12,11 @@ interface TransactionRepositoryInterface
      * @return Transaction
      */
     public function create(array $data): Transaction;
+
+    /**
+     * @param array $payload
+     * @param int $accountId
+     * @return LengthAwarePaginator
+     */
+    public function getTransactionsByAccount(array $payload, int $accountId): LengthAwarePaginator;
 }

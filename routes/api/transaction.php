@@ -9,4 +9,5 @@ Route::group([
     Route::middleware('abilities:transactions.give-credit')->post('/give-credit', 'TransactionController@giveCredit');
     Route::middleware('abilities:transactions.transfer')->post('/transfer', 'TransactionController@transferBetweenAccounts');
     Route::middleware('abilities:transactions.withdraw')->post('/withdraw', 'TransactionController@withdraw');
+    Route::get('/{account:id}', 'TransactionController@getMyTransactions');
 });

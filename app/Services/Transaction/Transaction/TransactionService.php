@@ -2,16 +2,20 @@
 
 namespace App\Services\Transaction\Transaction;
 
+use App\Enums\ResponseMessageEnums;
 use App\Enums\TransactionStatusEnums;
 use App\Enums\TransactionTypeEnums;
 use App\Helpers\CurrencyHelper;
 use App\Http\Resources\Account\AccountResource;
+use App\Http\Resources\Pagination\PaginationResource;
+use App\Http\Resources\Transaction\TransactionResource;
 use App\Models\Account;
 use App\Repositories\Account\AccountRepositoryInterface;
 use App\Repositories\Transaction\TransactionRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -177,5 +181,23 @@ class TransactionService implements TransactionServiceInterface
 
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * @param array $payload
+     * @param int $accountId
+     * @return JsonResource
+     */
+    public function getMyTransactions(array $payload, int $accountId): JsonResource
+    {
+        $account = $this->accountRepository->getAccountById($accountId);
+
+        if ($account->user_id !== Auth::id()) {
+            abort(Response::HTTP_FORBIDDEN, ResponseMessageEnums::FORBIDDEN);
+        }
+
+        $result = $this->transactionRepository->getTransactionsByAccount($payload, $accountId);
+
+        return PaginationResource::make($result)->additional(['dataResource' => TransactionResource::class]);
     }
 }
