@@ -13,7 +13,7 @@ This is a simple app  to manage ledger. This project allows you:
 - All of user's can do.
 - Give credit to user's account.
 - List all or single account.
-- ~~List all or single transaction (Coming soon)~~.
+- List all or single transaction
 <br />
 <br />
 Don't you have a time for testing? Don't worry, I have prepared a Postman collection for you. 
