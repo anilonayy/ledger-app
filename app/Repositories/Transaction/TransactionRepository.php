@@ -36,4 +36,22 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->take($take)
             ->paginate($take, ['*'], 'page');
     }
+
+    /**
+     * @param int $id
+     * @return Transaction
+     */
+    public function getByIdWithDetails(int $id): Transaction
+    {
+        return Transaction::findOrFail($id)->load([
+            'sender' => function ($query) {
+                $query->select('id', 'name', 'currency', 'user_id')
+                    ->with('user:id,name');
+            },
+            'receiver' => function ($query) {
+                $query->select('id', 'name', 'currency', 'balance','user_id')
+                    ->with('user:id,name');
+            }
+        ]);
+    }
 }

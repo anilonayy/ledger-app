@@ -24,7 +24,7 @@ class Transaction extends Model
      */
     public function sender(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'sender_account_id', 'user_id');
+        return $this->belongsTo(Account::class, 'sender_account_id', 'id');
     }
 
     /**
@@ -32,6 +32,6 @@ class Transaction extends Model
      */
     public function receiver(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'receiver_account_id', 'user_id');
+        return $this->belongsTo(Account::class, 'receiver_account_id', 'id');
     }
 }

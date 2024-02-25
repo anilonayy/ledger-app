@@ -19,4 +19,10 @@ interface TransactionRepositoryInterface
      * @return LengthAwarePaginator
      */
     public function getTransactionsByAccount(array $payload, int $accountId): LengthAwarePaginator;
+
+    /**
+     * @param int $id
+     * @return Transaction
+     */
+    public function getByIdWithDetails(int $id): Transaction;
 }

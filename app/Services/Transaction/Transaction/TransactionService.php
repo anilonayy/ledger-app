@@ -8,6 +8,7 @@ use App\Enums\TransactionTypeEnums;
 use App\Helpers\CurrencyHelper;
 use App\Http\Resources\Account\AccountResource;
 use App\Http\Resources\Pagination\PaginationResource;
+use App\Http\Resources\Transaction\TransactionDetailResource;
 use App\Http\Resources\Transaction\TransactionResource;
 use App\Models\Account;
 use App\Repositories\Account\AccountRepositoryInterface;
@@ -190,14 +191,33 @@ class TransactionService implements TransactionServiceInterface
      */
     public function getMyTransactions(array $payload, int $accountId): JsonResource
     {
+        $user = Auth::user();
         $account = $this->accountRepository->getAccountById($accountId);
 
-        if ($account->user_id !== Auth::id()) {
+        if ($account->user_id !== $user->id && !$user->tokenCan('transactions.read-all')) {
             abort(Response::HTTP_FORBIDDEN, ResponseMessageEnums::FORBIDDEN);
         }
 
         $result = $this->transactionRepository->getTransactionsByAccount($payload, $accountId);
 
         return PaginationResource::make($result)->additional(['dataResource' => TransactionResource::class]);
+    }
+
+    /**
+     * @param int $transactionId
+     * @return JsonResource
+     */
+    public function getSingleTransaction(int $transactionId): JsonResource
+    {
+        $user = Auth::user();
+        $transaction = $this->transactionRepository->getByIdWithDetails($transactionId);
+
+        $account = $this->accountRepository->getAccountById($transaction->receiver_account_id);
+
+        if ($account->user_id !== $user->id && !$user->tokenCan('transactions.read-all')) {
+            abort(Response::HTTP_FORBIDDEN, ResponseMessageEnums::FORBIDDEN);
+        }
+
+        return TransactionDetailResource::make($transaction);
     }
 }

@@ -57,4 +57,14 @@ class TransactionController extends Controller
     ): JsonResponse {
         return Api::ok($transactionService->getMyTransactions($request->validated(), $accountId));
     }
+
+    /**
+     * @param int $transactionId
+     * @param TransactionService $transactionService
+     * @return JsonResponse
+     */
+    public function getSingleTransaction(int $transactionId, TransactionService $transactionService): JsonResponse
+    {
+        return Api::ok($transactionService->getSingleTransaction($transactionId));
+    }
 }

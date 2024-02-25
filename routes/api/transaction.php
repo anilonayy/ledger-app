@@ -10,4 +10,5 @@ Route::group([
     Route::middleware('abilities:transactions.transfer')->post('/transfer', 'TransactionController@transferBetweenAccounts');
     Route::middleware('abilities:transactions.withdraw')->post('/withdraw', 'TransactionController@withdraw');
     Route::get('/list-by-account/{account:id}', 'TransactionController@getMyTransactions');
+    Route::get('/{transaction:id}', 'TransactionController@getSingleTransaction');
 });
