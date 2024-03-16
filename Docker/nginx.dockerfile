@@ -16,6 +16,3 @@ RUN sed -i "s/user www-data/user ${NGINXUSER}/g" /etc/nginx/nginx.conf
 
 # Add the user and group
 RUN adduser -g ${NGINXGROUP} -s /bin/sh -D ${NGINXUSER}
-RUN chmod -R 755 /var/www/html
-
-EXPOSE 80

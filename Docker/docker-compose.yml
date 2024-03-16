@@ -32,3 +32,28 @@ services:
             dockerfile: php.dockerfile
         volumes:
             - ../:/var/www/html
+    composer:
+        container_name: 'ledger_app_composer'
+        build:
+            context: .
+            dockerfile: composer.dockerfile
+        volumes:
+            - ../:/var/www/html
+    npm:
+        container_name: 'ledger_app_npm'
+        image: node:current-alpine
+        volumes:
+            - ../:/var/www/html
+        entrypoint: [ 'npm' ]
+        working_dir: /var/www/html
+    artisan:
+        container_name: 'ledger_app_artisan'
+        build:
+            context: .
+            dockerfile: php.dockerfile
+        volumes:
+            - ../:/var/www/html
+        working_dir: /var/www/html
+        depends_on:
+            - mysql
+        entrypoint: [ 'php', '/var/www/html/artisan' ]
