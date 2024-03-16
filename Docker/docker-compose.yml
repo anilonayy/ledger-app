@@ -15,16 +15,17 @@ services:
         depends_on:
             - mysql
             - php
+        networks:
+            - ledger_app_network
     mysql:
         container_name: 'ledger_app_mysql'
-        image: mariadb:10.5
+        build:
+            context: .
+            dockerfile: mysql.dockerfile
         ports:
-            - 3308:3308
-        environment:
-            MYSQL_DATABASE: laravel
-            MYSQL_USER: laravel
-            MYSQL_PASSWORD: secret
-            MYSQL_ROOT_PASSWORD: secret
+            - 3306:3306
+        networks:
+            - ledger_app_network
     php:
         container_name: 'ledger_app_php'
         build:
@@ -32,6 +33,8 @@ services:
             dockerfile: php.dockerfile
         volumes:
             - ../:/var/www/html
+        networks:
+            - ledger_app_network
     composer:
         container_name: 'ledger_app_composer'
         build:
@@ -39,6 +42,8 @@ services:
             dockerfile: composer.dockerfile
         volumes:
             - ../:/var/www/html
+        networks:
+            - ledger_app_network
     npm:
         container_name: 'ledger_app_npm'
         image: node:current-alpine
@@ -46,6 +51,8 @@ services:
             - ../:/var/www/html
         entrypoint: [ 'npm' ]
         working_dir: /var/www/html
+        networks:
+            - ledger_app_network
     artisan:
         container_name: 'ledger_app_artisan'
         build:
@@ -57,3 +64,8 @@ services:
         depends_on:
             - mysql
         entrypoint: [ 'php', '/var/www/html/artisan' ]
+        networks:
+            - ledger_app_network
+networks:
+    ledger_app_network:
+        driver: bridge
