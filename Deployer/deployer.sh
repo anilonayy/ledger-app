@@ -38,6 +38,7 @@ prepareLaravel() {
     npmInstall
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php cp .env.example .env
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan migrate:fresh --seed
+    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan view:clear
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan view:cache
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan config:clear
