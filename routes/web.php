@@ -14,5 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    try {
+        $status = true;
+        App\Models\User::find(25);
+    } catch (\Exception $e) {
+        $status = false;
+    }
+
+    return response()->json([
+        'message' => 'Welcome to the Ledger App.',
+        'db_health' => $status ? 'ok' : 'error',
+        'status' => 1923
+    ]);
 });
