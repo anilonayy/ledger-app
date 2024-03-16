@@ -1,0 +1,34 @@
+name: 'ledger_app'
+version: '2.24'
+services:
+    nginx:
+        container_name: 'ledger_app_nginx'
+        build:
+            context: .
+            dockerfile: nginx.dockerfile
+        ports:
+            - 80:80
+        # {hostPath}:{imagePath} volumes provide us the way to share data between host and container
+        volumes:
+            - ../:/var/www/html
+        # This part for this container working depends on related containers, this container will wait the other containers to up.
+        depends_on:
+            - mysql
+            - php
+    mysql:
+        container_name: 'ledger_app_mysql'
+        image: mariadb:10.5
+        ports:
+            - 3308:3308
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+    php:
+        container_name: 'ledger_app_php'
+        build:
+            context: .
+            dockerfile: php.dockerfile
+        volumes:
+            - ../:/var/www/html
