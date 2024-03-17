@@ -1,15 +1,24 @@
 # Ledger App
 
+## How to build local environment
+1. Clone this repository
+2. Switch to "Deployer" directory.
+3. Run './deployer.sh magic' to build local environment.
+4. Run './deployer.sh up' to start the services.
+5. Run './deployer.sh down' to stop the services.
+
+## What can you do with this app?
+
 This is a simple app  to manage ledger. This project allows you:
 
-## User
+### User
 - Create a new account
 - List own accounts
 - Balance transfer between another accounts.
 - Withdraw money from own account
 - Get account balance on specific times.
 
-## Admin
+### Admin
 - All of user's can do.
 - Give credit to user's account.
 - List all or single account.

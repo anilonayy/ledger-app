@@ -1,10 +1,15 @@
 DOCKER_COMPOSE_PATH=../Docker/docker-compose.yml
 
 magic() {
+    showWelcomeMessage
     buildDocker
     stopDocker
     startDocker
     prepareLaravel
+}
+
+showWelcomeMessage() {
+    cat ./welcome_prompt.txt
 }
 
 buildDocker() {
@@ -36,9 +41,9 @@ prepareLaravel() {
 
     composerInstall
     npmInstall
+    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php cp .env.example .env
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan migrate:fresh --seed
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan view:clear
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan view:cache
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm artisan config:clear
@@ -57,21 +62,19 @@ npmInstall() {
 }
 
 help() {
-    echo "Usage: deployer.sh [command]"
+    echo "Usage: ./deployer.sh [command]"
     echo "Commands:"
     echo "  magic: Build all app"
-    echo "  build: Build docker"
-    echo "  start: Start docker"
-    echo "  stop: Stop docker"
+    echo "  up: Start all services"
+    echo "  down: Stop all services"
+    echo "  help: Show available commands"
 }
 
 if [ "$1" = "magic" ]; then
     magic
-elif [ "$1" = "build" ]; then
-    buildDocker
-elif [ "$1" = "start" ]; then
+elif [ "$1" = "up" ]; then
     startDocker
-elif [ "$1" = "stop" ]; then
+elif [ "$1" = "down" ]; then
     stopDocker
 elif [ "$1" = "help" ]; then
     help
