@@ -5,7 +5,7 @@
 2. Switch to "Deployer" directory.
 3. Build the environment by running the following command:
 ```bash
- ./deployer.sh build
+ ./deployer.sh magic
 ```
 4. Run './deployer.sh up' to start the services.
 ```bash
