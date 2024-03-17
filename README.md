@@ -3,9 +3,18 @@
 ## How to build local environment
 1. Clone this repository
 2. Switch to "Deployer" directory.
-3. Run './deployer.sh magic' to build local environment.
+3. Build the environment by running the following command:
+```bash
+ ./deployer.sh build
+```
 4. Run './deployer.sh up' to start the services.
+```bash
+ ./deployer.sh up
+```
 5. Run './deployer.sh down' to stop the services.
+```bash
+ ./deployer.sh down
+```
 
 ## What can you do with this app?
 
