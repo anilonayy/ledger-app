@@ -41,14 +41,15 @@ stopDocker() {
 
 composerInstall() {
     echo "Composer installing..."
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm composer install
+    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php composer install
 }
 
 prepareLaravel() {
     echo "Preparing Laravel..."
 
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
-
+    composerInstall
+    npmInstall
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan key:generate
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan cache:clear
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan route:clear
