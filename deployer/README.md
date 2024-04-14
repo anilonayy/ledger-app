@@ -14,28 +14,33 @@ ssh -i "your-key.pem" ubuntu@your-public-ip
 ## Step 3: Configuration the instance
 Update the package list and install the required packages.
 
+Switch the sudo mode.
 ```bash
-sudo apt update -y
-sudo apt install docker -y
-sudo apt install docker.io -y
-sudo usermod -aG docker ubuntu
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-sudo service docker start
-sudo apt install git -y
-sudo apt install gh -y
-sudo apt install python3 -y
-sudo apt install python3-pip -y
+sudo su
+```
+
+```bash
+apt update -y
+apt install docker -y
+apt install docker.io -y
+usermod -aG docker ubuntu
+curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+service docker start
+apt install git -y
+apt install gh -y
+apt install python3 -y
+apt install python3-pip -y
 ```
 
 ### Step 4: Build the project
 ```bash
-sudo git clone https://github.com/anilonayy/ledger-app.git
+git clone https://github.com/anilonayy/ledger-app.git
 cd ./ledger-app/deployer
-sudo chmod +x ./deployer.sh
-./deployer.sh magic
+chmod +x ./deployer.sh
+./deployer.sh magic --prod
 ```
-Hmmm but still i can't see my project in the browser.
+### Hmmm but i still can't see my project in the browser 🥺
 
 And after these steps you still may need to configure the security group of the instance to allow the incoming traffic on the port 80 and 443.
 
