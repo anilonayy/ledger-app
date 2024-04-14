@@ -1,74 +1,57 @@
 DOCKER_COMPOSE_PATH=../docker-compose.yml
 
-magic() {
-    showWelcomeMessage
-    buildDocker
-    stopDocker
-    startDocker
-    prepareLaravel
-}
-
 showWelcomeMessage() {
     cat ./welcome_prompt.txt
 }
 
 buildDocker() {
-    if [ ! -f "../.env" ]; then
-        echo "Creating env file for env $APP_ENV"
-        cp ../.env.example ../.env
-    else
-        echo "env file exists."
-    fi
-
-
-    echo "Docker building..."
-    if [ "$2" = "no-cache" ]; then
-        docker-compose -f $DOCKER_COMPOSE_PATH build --no-cache
-    else
-        docker-compose -f $DOCKER_COMPOSE_PATH build
-    fi
+    echo "Building Docker..."
+    docker-compose -f "$DOCKER_COMPOSE_PATH" build ${2:+"--no-cache"}
 }
 
 startDocker() {
-    echo "Docker starting..."
-    docker-compose -f $DOCKER_COMPOSE_PATH up -d
+    echo "Starting Docker..."
+    docker-compose -f "$DOCKER_COMPOSE_PATH" up -d
 }
 
 stopDocker() {
-    echo "Docker stopping..."
-    docker-compose -f $DOCKER_COMPOSE_PATH down
+    echo "Stopping Docker..."
+    docker-compose -f "$DOCKER_COMPOSE_PATH" down
 }
 
 composerInstall() {
-    echo "Composer installing..."
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php composer install
+    echo "Installing Composer dependencies..."
+    docker-compose -f "$DOCKER_COMPOSE_PATH" exec php composer install
 }
 
 prepareLaravel() {
     echo "Preparing Laravel..."
-
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
+    docker-compose -f "$DOCKER_COMPOSE_PATH" exec php chmod -R 777 ./storage
     composerInstall
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan key:generate
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan cache:clear
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan route:clear
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan config:clear
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan view:clear
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan storage:link
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan migrate:fresh --seed
+    docker-compose -f "$DOCKER_COMPOSE_PATH" exec php sh -c '
+        php artisan key:generate &&
+        php artisan cache:clear &&
+        php artisan route:clear &&
+        php artisan config:clear &&
+        php artisan view:clear &&
+        php artisan storage:link &&
+        php artisan migrate:fresh --seed'
 }
 
 help() {
     echo "Usage: ./deployer.sh [command]"
     echo "Commands:"
-    echo "  magic: Build all app (Useful arg: no-cache)"
+    echo "  magic: Build, start, and prepare Laravel (Useful arg: no-cache)"
     echo "  up: Start all services"
     echo "  down: Stop all services"
     echo "  help: Show available commands"
 }
 
 if [ "$1" = "magic" ]; then
-    magic
+    showWelcomeMessage
+    buildDocker "$@"
+    startDocker
+    prepareLaravel
 elif [ "$1" = "up" ]; then
     startDocker
 elif [ "$1" = "down" ]; then
