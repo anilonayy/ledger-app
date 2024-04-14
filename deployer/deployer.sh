@@ -49,7 +49,6 @@ prepareLaravel() {
 
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php chmod -R 777 ./storage
     composerInstall
-    npmInstall
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan key:generate
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan cache:clear
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan route:clear
@@ -57,11 +56,6 @@ prepareLaravel() {
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan view:clear
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan storage:link
     docker-compose -f $DOCKER_COMPOSE_PATH run --rm php php artisan migrate:fresh --seed
-}
-
-npmInstall() {
-    echo "Npm installing..."
-    docker-compose -f $DOCKER_COMPOSE_PATH run --rm php npm install
 }
 
 help() {
