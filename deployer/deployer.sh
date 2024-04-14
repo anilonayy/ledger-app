@@ -4,8 +4,19 @@ showWelcomeMessage() {
     cat ./welcome_prompt.txt
 }
 
+copyEnvFile() {
+    echo "Copying .env file..."
+    if [ -f  "../.env" ]; then
+        echo ".env file already exists"
+    else
+        cp ../.env.example ../.env
+        echo ".env file copied successfully"
+    fi
+}
+
 buildDocker() {
     echo "Building Docker..."
+
     docker-compose -f "$DOCKER_COMPOSE_PATH" build ${2:+"--no-cache"}
 }
 
@@ -49,6 +60,7 @@ help() {
 
 if [ "$1" = "magic" ]; then
     showWelcomeMessage
+    copyEnvFile
     buildDocker "$@"
     startDocker
     prepareLaravel
