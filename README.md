@@ -2,8 +2,14 @@
 
 ## How to build local environment
 1. Clone this repository
-2. Switch to "Deployer" directory.
-3. Build the environment by running the following command:
+```bash
+git clone git@github.com:anilonayy/ledger-app.git
+```
+3. Switch to "Deployer" directory.
+```bash
+cd ./ledger-app/Deployer
+```
+4. Build the environment by running the following command:
 ```bash
  ./deployer.sh magic
 ```
