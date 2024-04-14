@@ -46,10 +46,10 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'database'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'ledgerApp'),
-            'username' => env('DB_USERNAME', 'ledgerApp'),
+            'database' => env('DB_DATABASE', 'ledger_app'),
+            'username' => env('DB_USERNAME', 'homestead'),
             'password' => env('DB_PASSWORD', 'secret'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',

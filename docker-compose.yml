@@ -1,0 +1,42 @@
+name: 'ledger_app'
+version: '2.24'
+services:
+    nginx:
+        container_name: 'ledger_app_nginx'
+        build:
+            context: ./docker/nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - database
+            - php
+        networks:
+            - ledger_app_network
+    database:
+        container_name: 'ledger_app_mysql'
+        image: mysql:5.7
+        environment:
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        ports:
+            - 3306:3306
+        networks:
+            - ledger_app_network
+    php:
+        container_name: 'ledger_app_php'
+        build:
+            context: .
+        volumes:
+            - ./:/var/www
+        networks:
+            - ledger_app_network
+        depends_on:
+            - database
+networks:
+    ledger_app_network:
+        driver: bridge

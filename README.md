@@ -5,11 +5,11 @@
 ```bash
 git clone git@github.com:anilonayy/ledger-app.git
 ```
-3. Switch to "Deployer" directory.
+2. Switch to "deployer" directory.
 ```bash
-cd ./ledger-app/Deployer
+cd ./ledger-app/deployer
 ```
-4. Build the environment by running the following command:
+3. Build the environment by running the following command:
 ```bash
  ./deployer.sh magic
 ```
