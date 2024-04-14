@@ -1,6 +1,11 @@
 # Ledger App
 
 ## How to build local environment
+
+0. Add the following lines to your /etc/hosts file.
+```bash
+127.0.0.1 ledger.anilonay.com
+```
 1. Clone this repository
 ```bash
 git clone git@github.com:anilonayy/ledger-app.git

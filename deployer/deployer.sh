@@ -19,7 +19,6 @@ prepareEnvFileForProduction() {
         echo "Preparing .env file for production..."
         sed -i 's/APP_ENV=local/APP_ENV=production/g' ../.env
         sed -i 's/APP_DEBUG=true/APP_DEBUG=false/g' ../.env
-        sed -i 's/APP_URL=http:\/\/localhost/APP_URL=https:\/\/anilonay.com/g' ../.env
     fi
 }
 
