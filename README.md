@@ -22,6 +22,13 @@ cd ./ledger-app/deployer
  ./deployer.sh down
 ```
 
+(Shhh here is the fast way..)
+```bash
+git clone git@github.com:anilonayy/ledger-app.git
+cd ./ledger-app/deployer
+./deployer.sh magic
+```
+
 ## What can you do with this app?
 
 This is a simple app  to manage ledger. This project allows you:
