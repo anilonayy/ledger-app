@@ -1,8 +1,6 @@
 FROM php:8.3-fpm-alpine as php
 
 ## Setting environment variables
-#ENV PHPGROUP=laravel
-#ENV PHPUSER=laravel
 ENV WORKDIR=/var/www
 
 WORKDIR $WORKDIR
@@ -14,13 +12,6 @@ COPY --from=node:16.3.0 /usr/local/bin/node /usr/local/bin/node
 
 # Copy configuration files.
 COPY ./docker/php/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
-
-## Create user and group as 'laravel'
-#RUN adduser -g ${PHPGROUP} -s /bin/sh -D ${PHPUSER}
-#
-## Change the group and user from www-data to laravel for www.conf
-#RUN sed -i "s/user www-data/user ${PHPUSER}/g" /usr/local/etc/php-fpm.d/www.conf
-#RUN sed -i "s/group www-data/group ${PHPGROUP}/g" /usr/local/etc/php-fpm.d/www.conf
 
 # Apply all access to storage folder to working properly
 RUN chown -R 777 $WORKDIR
