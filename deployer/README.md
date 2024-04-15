@@ -52,4 +52,20 @@ And ta daaaa! You have deployed the project on AWS EC2.
 
 
 
+
+
+We should configure our domain to point to our elastic ip address with A Name record.
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
+
+
 I'm took reference from [this](https://www.youtube.com/watch?v=yhiuV6cqkNs&ab_channel=Scale-UpSaaS) video while preparing this file.
+
+After these steps, if we want to open with SSL, we first need an Elatic Load Balancer. When installing Elastic Load Balancer, we need to create Target Groups and when creating a group, if we are using the EC2 service (we are using this one), we should select the Instance option and proceed. Then we need to edit Listener for ELB, we need to edit these listener as HTTPS 443, HTTP Redirecting To HTTPS.
+
+Afterwards, when we enter the ELB detail, we see a DNS name. We enter this DNS as a CNAME record in our related Domain provider.
+
+
+
+https://github.com/saasscaleup/nodejs-ssl-server
