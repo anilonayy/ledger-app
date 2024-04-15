@@ -4,7 +4,7 @@
 
 0. Add the following lines to your /etc/hosts file.
 ```bash
-127.0.0.1 ledger.anilonay.com
+127.0.0.1 ledger.showsider.life
 ```
 1. Clone this repository
 ```bash
