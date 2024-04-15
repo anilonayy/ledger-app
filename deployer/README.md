@@ -45,7 +45,7 @@ chmod +x ./deployer.sh
 And after these steps you still may need to configure the security group of the instance to allow the incoming traffic on the port 80 and 443.
 
 And ta daaaa! You have deployed the project on AWS EC2.
-![img.png](img.png)
+![img.png](images/img.png)
 
 
 ## Don't exicted yet! We still have not SSL Certificate...
@@ -55,9 +55,9 @@ And ta daaaa! You have deployed the project on AWS EC2.
 
 
 We should configure our domain to point to our elastic ip address with A Name record.
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 
-![img_2.png](img_2.png)
+![img_2.png](images/img_2.png)
 
 
 I'm took reference from [this](https://www.youtube.com/watch?v=yhiuV6cqkNs&ab_channel=Scale-UpSaaS) video while preparing this file.
@@ -66,6 +66,9 @@ After these steps, if we want to open with SSL, we first need an Elatic Load Bal
 
 Afterwards, when we enter the ELB detail, we see a DNS name. We enter this DNS as a CNAME record in our related Domain provider.
 
+
+# Anddd done! We have SSL Certificate now! 🎉🎉🎉
+![img_3.png](images/img_3.png)
 
 
 https://github.com/saasscaleup/nodejs-ssl-server
